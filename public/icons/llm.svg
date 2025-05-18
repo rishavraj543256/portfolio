@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="llm-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7F00FF" />
+      <stop offset="100%" stop-color="#E100FF" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="#1E293B" />
+  <path fill="url(#llm-gradient)" d="M24 34v60h12V34H24zm24 0v60h12V34H48zm24 0v60h12V34H72z" />
+  <path fill="none" stroke="url(#llm-gradient)" stroke-width="4" d="M24 70h72M24 56h72" />
+  <path fill="url(#llm-gradient)" d="M96 34v12h8V34h-8zm0 24v12h8V58h-8zm0 24v12h8V82h-8z" />
+</svg> 

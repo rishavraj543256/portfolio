@@ -1,15 +1,11 @@
-
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  ChartContainer, 
-  ChartTooltip,
-  ChartTooltipContent
-} from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
 import { Github, Star, GitPullRequestIcon, MessageSquare, Code } from "lucide-react";
+import CustomGitHubCalendar from "./GitHubCalendar";
+import GitHubCalendar from 'react-github-calendar';
+import React from "react";
 
 interface GitStat {
   name: string;
@@ -22,6 +18,45 @@ interface LanguageStat {
   percentage: number;
   color: string;
 }
+
+// Typewriter component
+const Typewriter = ({ text }: { text: string }) => {
+  const [displayed, setDisplayed] = React.useState("");
+  React.useEffect(() => {
+    let i = 0;
+    let forward = true;
+    let timeout: NodeJS.Timeout;
+    function typeLoop() {
+      if (forward) {
+        if (i <= text.length) {
+          setDisplayed(text.slice(0, i));
+          i++;
+          timeout = setTimeout(typeLoop, 60);
+        } else {
+          forward = false;
+          timeout = setTimeout(typeLoop, 1200); // Wait before erasing
+        }
+      } else {
+        if (i >= 0) {
+          setDisplayed(text.slice(0, i));
+          i--;
+          timeout = setTimeout(typeLoop, 30);
+        } else {
+          forward = true;
+          timeout = setTimeout(typeLoop, 600); // Wait before typing again
+        }
+      }
+    }
+    typeLoop();
+    return () => clearTimeout(timeout);
+  }, [text]);
+  return (
+    <span>
+      {displayed}
+      <span className="blinking-cursor">|</span>
+    </span>
+  );
+};
 
 const GitHubStats = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -51,30 +86,6 @@ const GitHubStats = () => {
     { name: "Java", percentage: 2.74, color: "#b07219" },
   ];
 
-  // Updated with more realistic contribution data
-  const contributionData = [
-    { month: "Jan", contributions: 42 },
-    { month: "Feb", contributions: 38 },
-    { month: "Mar", contributions: 67 },
-    { month: "Apr", contributions: 51 },
-    { month: "May", contributions: 72 },
-    { month: "Jun", contributions: 49 },
-    { month: "Jul", contributions: 63 },
-    { month: "Aug", contributions: 58 },
-    { month: "Sep", contributions: 47 },
-    { month: "Oct", contributions: 52 },
-    { month: "Nov", contributions: 44 },
-    { month: "Dec", contributions: 54 },
-  ];
-
-  const chartConfig = {
-    python: { theme: { light: "#3572A5", dark: "#3572A5" } },
-    javascript: { theme: { light: "#f1e05a", dark: "#f1e05a" } },
-    typescript: { theme: { light: "#2b7489", dark: "#2b7489" } },
-    html: { theme: { light: "#e34c26", dark: "#e34c26" } },
-    java: { theme: { light: "#b07219", dark: "#b07219" } },
-  };
-
   return (
     <section id="github-stats" className="py-20 px-4 relative" ref={sectionRef}>
       <motion.div
@@ -91,7 +102,7 @@ const GitHubStats = () => {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 flex items-center justify-center gap-3">
             <Github className="w-8 h-8" />
-            <span className="highlight-gradient">GitHub Statistics</span>
+            <span className="highlight-gradient"><Typewriter text="GitHub Statistics" /></span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             A snapshot of my open source contributions and coding activities on GitHub
@@ -197,49 +208,7 @@ const GitHubStats = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mb-4"
         >
-          <Card className="glass-card bg-gradient-to-br from-background/50 to-background border-border/50">
-            <CardHeader>
-              <CardTitle className="text-primary text-xl flex items-center gap-2">
-                <Github className="w-5 h-5" />
-                GitHub Calendar
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer className="h-64" config={chartConfig}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={contributionData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-                    <XAxis dataKey="month" />
-                    <YAxis hide />
-                    <ChartTooltip 
-                      content={<ChartTooltipContent />}
-                    />
-                    <Bar dataKey="contributions">
-                      {contributionData.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={entry.contributions > 60 ? '#4ade80' : entry.contributions > 45 ? '#60a5fa' : '#9ca3af'} 
-                        />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-              <div className="flex justify-between items-center mt-2">
-                <p className="text-sm text-muted-foreground">637 contributions in the last year</p>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Less</span>
-                  {['#9ca3af', '#60a5fa', '#4ade80', '#ec4899'].map((color, index) => (
-                    <span 
-                      key={index} 
-                      className="h-3 w-3 rounded-sm" 
-                      style={{ backgroundColor: color }} 
-                    ></span>
-                  ))}
-                  <span className="text-sm text-muted-foreground">More</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <CustomGitHubCalendar username="rishavraj543256" />
         </motion.div>
       </div>
     </section>
@@ -247,3 +216,16 @@ const GitHubStats = () => {
 };
 
 export default GitHubStats;
+
+// Add blinking cursor style
+<style>{`
+  .blinking-cursor {
+    display: inline-block;
+    width: 1ch;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+`}</style>

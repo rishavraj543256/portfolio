@@ -1,7 +1,46 @@
-
 import { motion } from "framer-motion";
 import { projects } from "@/data/projects";
 import { useRef } from "react";
+import React from "react";
+
+// Typewriter component
+const Typewriter = ({ text }: { text: string }) => {
+  const [displayed, setDisplayed] = React.useState("");
+  React.useEffect(() => {
+    let i = 0;
+    let forward = true;
+    let timeout: NodeJS.Timeout;
+    function typeLoop() {
+      if (forward) {
+        if (i <= text.length) {
+          setDisplayed(text.slice(0, i));
+          i++;
+          timeout = setTimeout(typeLoop, 60);
+        } else {
+          forward = false;
+          timeout = setTimeout(typeLoop, 1200); // Wait before erasing
+        }
+      } else {
+        if (i >= 0) {
+          setDisplayed(text.slice(0, i));
+          i--;
+          timeout = setTimeout(typeLoop, 30);
+        } else {
+          forward = true;
+          timeout = setTimeout(typeLoop, 600); // Wait before typing again
+        }
+      }
+    }
+    typeLoop();
+    return () => clearTimeout(timeout);
+  }, [text]);
+  return (
+    <span>
+      {displayed}
+      <span className="blinking-cursor">|</span>
+    </span>
+  );
+};
 
 const Projects = () => {
   const projectsRef = useRef<HTMLDivElement>(null);
@@ -32,7 +71,7 @@ const Projects = () => {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="highlight-gradient">My Projects</span>
+            <span className="highlight-gradient"><Typewriter text="My Projects" /></span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Here are some of my recent works. Each project was carefully crafted with attention to detail, using modern technologies and best practices.
@@ -134,6 +173,19 @@ const Projects = () => {
           </a>
         </motion.div>
       </div>
+
+      {/* Add blinking cursor style */}
+      <style>{`
+        .blinking-cursor {
+          display: inline-block;
+          width: 1ch;
+          animation: blink 1s steps(1) infinite;
+        }
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+      `}</style>
     </section>
   );
 };

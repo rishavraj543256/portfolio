@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="ai-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B6B" />
+      <stop offset="100%" stop-color="#5E72EB" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="#1E293B" />
+  <path fill="url(#ai-gradient)" d="M40 34v60h12V34H40zm36 0v60h12V34H76zM40 64h48v12H40V64z" />
+  <circle cx="64" cy="64" r="40" fill="none" stroke="url(#ai-gradient)" stroke-width="4" />
+</svg> 

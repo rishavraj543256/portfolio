@@ -1,11 +1,12 @@
-
 import { useEffect } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import AboutMe from "@/components/AboutMe";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
+import Education from "@/components/Education";
 import GitHubStats from "@/components/GitHubStats";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -67,8 +68,10 @@ const Index = () => {
           <Navbar />
           <main>
             <Hero />
+            <AboutMe />
             <Projects />
             <Skills />
+            <Education />
             <GitHubStats />
             <Contact />
           </main>
