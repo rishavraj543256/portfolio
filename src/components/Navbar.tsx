@@ -50,7 +50,7 @@ const Navbar = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <span className="highlight-gradient">Portfolio.</span>
+           
           </motion.div>
 
           {/* Desktop Navigation */}
