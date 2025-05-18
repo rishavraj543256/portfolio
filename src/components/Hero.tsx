@@ -29,7 +29,7 @@ const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <span className="highlight-gradient">John Doe</span>
+              <span className="highlight-gradient">Rishav Raj</span>
             </motion.h1>
             <motion.h2
               className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground mb-6"
@@ -37,7 +37,7 @@ const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              I build amazing web experiences
+              Python Developer
             </motion.h2>
             <motion.p
               className="text-lg text-muted-foreground mb-8 max-w-lg"
@@ -45,7 +45,8 @@ const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              I'm a creative full-stack developer with a passion for crafting clean, innovative, and user-friendly digital experiences that deliver real value.
+              Automation Developer with expertise in Python, web scraping, and process automation. 
+              I build robust solutions that improve operational efficiency and deliver measurable business value.
             </motion.p>
             <motion.div
               className="flex flex-wrap gap-4"
@@ -72,13 +73,20 @@ const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
             >
-              {["github", "linkedin", "twitter", "dribbble"].map((platform) => (
+              {[
+                { icon: "github", url: "https://github.com/rishavraj543256" },
+                { icon: "linkedin", url: "https://linkedin.com/in/rishavraj1998" },
+                { icon: "mail", url: "mailto:rajrishav543256@gmail.com" },
+                { icon: "phone", url: "tel:+917903312858" }
+              ].map((platform) => (
                 <a 
-                  key={platform} 
-                  href={`#${platform}`}
+                  key={platform.icon} 
+                  href={platform.url}
                   className="text-muted-foreground hover:text-primary transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <span className="sr-only">{platform}</span>
+                  <span className="sr-only">{platform.icon}</span>
                   <div className="w-6 h-6 bg-muted-foreground/50 rounded-full hover:bg-primary transition-colors"></div>
                 </a>
               ))}
@@ -104,7 +112,7 @@ const Hero = () => {
                 }}
               />
               <div className="absolute inset-4 rounded-full bg-background flex items-center justify-center overflow-hidden">
-                <div className="text-7xl">👋</div>
+                <div className="text-7xl">👨‍💻</div>
               </div>
             </div>
           </motion.div>

@@ -8,28 +8,22 @@ interface Skill {
   icon: string;
 }
 
-const frontend: Skill[] = [
-  { name: "HTML/CSS", percentage: 95, icon: "🌐" },
-  { name: "JavaScript", percentage: 90, icon: "📜" },
-  { name: "TypeScript", percentage: 85, icon: "🔷" },
-  { name: "React", percentage: 92, icon: "⚛️" },
-  { name: "Next.js", percentage: 88, icon: "▲" },
+const programming: Skill[] = [
+  { name: "Python", percentage: 90, icon: "🐍" },
+  { name: "Javascript", percentage: 70, icon: "📜" },
+  { name: "HTML/CSS", percentage: 75, icon: "🌐" },
 ];
 
-const backend: Skill[] = [
-  { name: "Node.js", percentage: 85, icon: "🟢" },
-  { name: "Express", percentage: 80, icon: "🚂" },
-  { name: "PostgreSQL", percentage: 75, icon: "🐘" },
-  { name: "MongoDB", percentage: 78, icon: "🍃" },
-  { name: "GraphQL", percentage: 70, icon: "◈" },
+const frameworks: Skill[] = [
+  { name: "Django", percentage: 85, icon: "🎯" },
+  { name: "Flask", percentage: 80, icon: "🧪" },
+  { name: "Selenium", percentage: 85, icon: "🔍" },
+  { name: "BeautifulSoup", percentage: 90, icon: "🍲" },
 ];
 
-const tools: Skill[] = [
-  { name: "Git", percentage: 90, icon: "🌿" },
-  { name: "Docker", percentage: 75, icon: "🐳" },
-  { name: "AWS", percentage: 70, icon: "☁️" },
-  { name: "CI/CD", percentage: 65, icon: "🔄" },
-  { name: "Figma", percentage: 80, icon: "🎨" },
+const databases: Skill[] = [
+  { name: "MongoDB", percentage: 80, icon: "🍃" },
+  { name: "MySQL", percentage: 75, icon: "🐬" },
 ];
 
 const SkillCategory = ({
@@ -76,6 +70,69 @@ const SkillCategory = ({
   );
 };
 
+// New component for spinning skills
+const SpinningSkills = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const skills = [
+    { name: "Python", color: "bg-blue-500" },
+    { name: "Selenium", color: "bg-green-500" },
+    { name: "BeautifulSoup", color: "bg-purple-500" },
+    { name: "MongoDB", color: "bg-yellow-500" },
+    { name: "Django", color: "bg-red-500" },
+    { name: "Flask", color: "bg-indigo-500" },
+    { name: "OpenCV", color: "bg-pink-500" },
+    { name: "MySQL", color: "bg-teal-500" },
+  ];
+
+  return (
+    <motion.div
+      ref={containerRef}
+      className="relative h-64 md:h-80 w-full flex items-center justify-center my-12"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="absolute inset-0 flex items-center justify-center">
+        <motion.div
+          className="text-5xl md:text-6xl font-bold text-primary"
+          animate={{ scale: [0.9, 1.1, 0.9] }}
+          transition={{ repeat: Infinity, duration: 3 }}
+        >
+          Skills
+        </motion.div>
+      </div>
+      {skills.map((skill, index) => (
+        <motion.div
+          key={skill.name}
+          className={`absolute rounded-full ${skill.color} text-white px-4 py-2 text-sm md:text-base font-medium shadow-lg`}
+          animate={{
+            rotate: [0, 360],
+            radius: 120 + (index % 3) * 30,
+          }}
+          transition={{
+            duration: 20,
+            delay: index * 0.5,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          style={{
+            transformOrigin: "center center",
+            left: "50%",
+            top: "50%",
+            x: `-50%`,
+            y: `-50%`,
+          }}
+          custom={index}
+        >
+          {skill.name}
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+};
+
 const Skills = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -104,14 +161,18 @@ const Skills = () => {
             <span className="highlight-gradient">My Skills</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            I've developed expertise across front-end, back-end, and the tools that bring them together
+            I've developed expertise across Python development, web scraping, automation, 
+            and various frameworks and tools
           </p>
         </motion.div>
 
+        {/* Spinning Skills Animation */}
+        <SpinningSkills />
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <SkillCategory title="Frontend Development" skills={frontend} delay={0} />
-          <SkillCategory title="Backend Development" skills={backend} delay={0.2} />
-          <SkillCategory title="Tools & Others" skills={tools} delay={0.4} />
+          <SkillCategory title="Programming Languages" skills={programming} delay={0} />
+          <SkillCategory title="Frameworks & Libraries" skills={frameworks} delay={0.2} />
+          <SkillCategory title="Databases & Tools" skills={databases} delay={0.4} />
         </div>
 
         <motion.div
@@ -124,15 +185,15 @@ const Skills = () => {
           <h3 className="text-xl font-bold mb-4">Key Areas of Expertise</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              "Responsive Web Design",
-              "Progressive Web Apps",
-              "API Development",
-              "Database Design",
-              "UI/UX Optimization",
-              "Performance Tuning",
-              "Testing & Debugging",
-              "State Management",
-              "Serverless Architecture",
+              "Web Scraping",
+              "Process Automation",
+              "XML Processing",
+              "Image Recognition",
+              "Data Extraction",
+              "PDF Generation",
+              "Error Handling",
+              "Selenium WebDriver",
+              "API Integration",
             ].map((item) => (
               <motion.div
                 key={item}
