@@ -1,6 +1,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useTheme } from "@/hooks/use-theme";
 
 interface Skill {
   name: string;
@@ -41,7 +42,7 @@ const SkillCategory = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-6"
+      className="glass-card p-6 hover:scale-[1.02] transition-transform duration-300"
     >
       <h3 className="text-xl font-bold mb-6">{title}</h3>
       <div className="space-y-6">
@@ -70,9 +71,12 @@ const SkillCategory = ({
   );
 };
 
-// New component for spinning skills
+// Enhanced spinning skills component
 const SpinningSkills = () => {
+  const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
 
   const skills = [
     { name: "Python", color: "bg-blue-500" },
@@ -83,52 +87,132 @@ const SpinningSkills = () => {
     { name: "Flask", color: "bg-indigo-500" },
     { name: "OpenCV", color: "bg-pink-500" },
     { name: "MySQL", color: "bg-teal-500" },
+    { name: "Web Scraping", color: "bg-orange-500" },
+    { name: "Automation", color: "bg-emerald-500" },
   ];
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / containerRef.current.offsetWidth) - 0.5;
+        const y = ((e.clientY - rect.top) / containerRef.current.offsetHeight) - 0.5;
+        setMousePosition({ x, y });
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("mousemove", handleMouseMove);
+      container.addEventListener("mouseenter", () => setIsHovered(true));
+      container.addEventListener("mouseleave", () => setIsHovered(false));
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener("mousemove", handleMouseMove);
+        container.removeEventListener("mouseenter", () => setIsHovered(true));
+        container.removeEventListener("mouseleave", () => setIsHovered(false));
+      }
+    };
+  }, []);
 
   return (
     <motion.div
       ref={containerRef}
-      className="relative h-64 md:h-80 w-full flex items-center justify-center my-12"
+      className="relative h-80 md:h-96 w-full flex items-center justify-center my-12 overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <div className="absolute inset-0 flex items-center justify-center">
+      <motion.div
+        className="absolute w-full h-full"
+        animate={{
+          background: theme === "dark"
+            ? "radial-gradient(circle at center, rgba(71, 85, 105, 0.2) 0%, rgba(15, 23, 42, 0) 70%)"
+            : "radial-gradient(circle at center, rgba(224, 231, 255, 0.6) 0%, rgba(248, 250, 252, 0) 70%)",
+        }}
+        style={{
+          backgroundPosition: isHovered ? `${50 + mousePosition.x * 20}% ${50 + mousePosition.y * 20}%` : "50% 50%",
+        }}
+        transition={{ duration: 0.5 }}
+      />
+      
+      <div className="absolute inset-0 flex items-center justify-center z-10">
         <motion.div
-          className="text-5xl md:text-6xl font-bold text-primary"
-          animate={{ scale: [0.9, 1.1, 0.9] }}
+          className="relative text-5xl md:text-6xl lg:text-7xl font-bold text-glow"
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          animate={{ 
+            scale: [0.97, 1.03, 0.97],
+            textShadow: [
+              theme === "dark" ? "0 0 15px rgba(56, 189, 248, 0.5)" : "0 0 5px rgba(56, 189, 248, 0.3)",
+              theme === "dark" ? "0 0 20px rgba(56, 189, 248, 0.7)" : "0 0 10px rgba(56, 189, 248, 0.5)",
+              theme === "dark" ? "0 0 15px rgba(56, 189, 248, 0.5)" : "0 0 5px rgba(56, 189, 248, 0.3)",
+            ]
+          }}
           transition={{ repeat: Infinity, duration: 3 }}
         >
-          Skills
+          <span className="highlight-gradient">My Skills</span>
+          <motion.div 
+            className="absolute -z-10 w-32 h-32 rounded-full bg-accent/20 blur-xl"
+            style={{ top: '-50%', left: '30%' }}
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute -z-10 w-40 h-40 rounded-full bg-primary/20 blur-xl"
+            style={{ bottom: '-30%', right: '20%' }}
+            animate={{ scale: [1.2, 1, 1.2] }}
+            transition={{ duration: 5, repeat: Infinity }}
+          />
         </motion.div>
       </div>
-      {skills.map((skill, index) => (
-        <motion.div
-          key={skill.name}
-          className={`absolute rounded-full ${skill.color} text-white px-4 py-2 text-sm md:text-base font-medium shadow-lg`}
-          animate={{
-            rotate: [0, 360],
-            radius: 120 + (index % 3) * 30,
-          }}
-          transition={{
-            duration: 20,
-            delay: index * 0.5,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          style={{
-            transformOrigin: "center center",
-            left: "50%",
-            top: "50%",
-            x: `-50%`,
-            y: `-50%`,
-          }}
-          custom={index}
-        >
-          {skill.name}
-        </motion.div>
-      ))}
+
+      {skills.map((skill, index) => {
+        // Calculate orbit size based on index
+        const orbitSize = 120 + (index % 3) * 40;
+        const animationDuration = 15 + (index % 5) * 3;
+        const initialRotation = index * (360 / skills.length);
+
+        return (
+          <motion.div
+            key={skill.name}
+            className={`absolute py-2 px-4 rounded-full ${skill.color} text-white font-medium shadow-lg backdrop-blur-sm`}
+            initial={{ rotate: initialRotation, scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            animate={{
+              rotate: [initialRotation, initialRotation + 360],
+            }}
+            transition={{
+              rotate: {
+                repeat: Infinity,
+                duration: animationDuration,
+                ease: "linear",
+              },
+              scale: { duration: 0.5, delay: index * 0.1 }
+            }}
+            style={{
+              transformOrigin: "center center",
+              left: "50%",
+              top: "50%",
+              x: `-50%`,
+              y: `-50%`,
+              radius: orbitSize,
+            }}
+            whileHover={{ 
+              scale: 1.2, 
+              zIndex: 20,
+              boxShadow: "0 0 20px rgba(0,0,0,0.3)"
+            }}
+          >
+            {skill.name}
+          </motion.div>
+        );
+      })}
     </motion.div>
   );
 };
@@ -155,7 +239,7 @@ const Skills = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <span className="highlight-gradient">My Skills</span>
@@ -166,7 +250,7 @@ const Skills = () => {
           </p>
         </motion.div>
 
-        {/* Spinning Skills Animation */}
+        {/* Enhanced Spinning Skills Animation */}
         <SpinningSkills />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -176,7 +260,7 @@ const Skills = () => {
         </div>
 
         <motion.div
-          className="mt-16 glass-card p-6"
+          className="mt-16 glass-card p-6 animated-border rounded-lg"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -194,12 +278,18 @@ const Skills = () => {
               "Error Handling",
               "Selenium WebDriver",
               "API Integration",
-            ].map((item) => (
+            ].map((item, index) => (
               <motion.div
                 key={item}
                 className="flex items-center p-3 bg-primary/10 rounded-lg"
-                whileHover={{ scale: 1.03 }}
-                transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  backgroundColor: "hsl(var(--primary) / 0.2)",
+                }}
               >
                 <div className="mr-3 text-primary">✓</div>
                 <span className="text-sm">{item}</span>

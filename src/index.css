@@ -80,6 +80,10 @@
     @apply bg-background text-foreground transition-colors duration-500;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  ::selection {
+    @apply bg-primary/30 text-foreground;
+  }
 }
 
 @layer components {
@@ -100,7 +104,7 @@
   }
 
   .glass-card {
-    @apply bg-background/50 backdrop-blur-md border border-border/50 rounded-lg shadow-lg;
+    @apply bg-background/50 backdrop-blur-md border border-border/50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300;
   }
 
   .btn-hover-effect {
@@ -126,4 +130,43 @@
   .skill-progress-fill {
     @apply h-full bg-primary absolute top-0 left-0 transition-all duration-1000;
   }
+
+  /* New animations and effects */
+  .text-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-lg bg-background/30 border border-white/10;
+  }
+
+  .animated-border {
+    @apply relative;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--secondary)), hsl(var(--primary)));
+    background-size: 300% 300%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .animated-border::before {
+    @apply absolute inset-[1px] content-[''] bg-background rounded-[inherit] z-0;
+  }
+
+  .animated-border > * {
+    @apply relative z-10;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Cursor trail effect (will be activated via JS) */
+.cursor-dot {
+  @apply fixed w-2 h-2 rounded-full bg-primary pointer-events-none opacity-70 transition-all duration-200 z-50;
+}
+
+.cursor-trail {
+  @apply fixed w-1 h-1 rounded-full bg-primary pointer-events-none opacity-50 z-50;
+  transition: 0.1s;
 }
