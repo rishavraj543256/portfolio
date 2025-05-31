@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
 import { useState, useEffect, useRef } from "react";
 
@@ -43,22 +43,132 @@ const Typewriter = ({ text }: { text: string }) => {
 
 // Add your main skills here (or import from Skills.tsx if you want to keep in sync)
 const heroSkills = [
-  { name: "Python", color: "#3572A5" },
-  { name: "Django", color: "#092E20" },
-  { name: "Flask", color: "#000000" },
-  { name: "Selenium", color: "#43B02A" },
-  { name: "MongoDB", color: "#47A248" },
-  { name: "MySQL", color: "#00758F" },
-  { name: "BeautifulSoup", color: "#4B8BBE" },
-  { name: "Numpy", color: "#013243" },
-  { name: "Pandas", color: "#150458" },
-  { name: "Web Scraping", color: "#e63946" },
-  { name: "AI", color: "#8b5cf6" },
-  { name: "Machine Learning", color: "#f59e42" },
-  { name: "LLM", color: "#eab308" },
-  { name: "Git", color: "#F05032" },
-  { name: "Linux", color: "#FCC624" },
+  { name: "Python", color: "#3572A5", size: 1.2 },
+  { name: "Django", color: "#092E20", size: 1.1 },
+  { name: "Flask", color: "#000000", size: 1.1 },
+  { name: "Selenium", color: "#43B02A", size: 1.0 },
+  { name: "MongoDB", color: "#47A248", size: 1.1 },
+  { name: "MySQL", color: "#00758F", size: 1.0 },
+  { name: "BeautifulSoup", color: "#4B8BBE", size: 0.9 },
+  { name: "Numpy", color: "#013243", size: 1.1 },
+  { name: "Pandas", color: "#150458", size: 1.1 },
+  { name: "Web Scraping", color: "#e63946", size: 0.9 },
+  { name: "AI", color: "#8b5cf6", size: 1.2 },
+  { name: "Machine Learning", color: "#f59e42", size: 1.0 },
+  { name: "LLM", color: "#eab308", size: 1.1 },
+  { name: "Git", color: "#F05032", size: 1.0 },
+  { name: "Linux", color: "#FCC624", size: 1.0 },
 ];
+
+// Tag Cloud component
+const TagCloud = ({ radius = 200 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    let animationFrame: number;
+    let lastTime = 0;
+    const rotationSpeed = 0.15;
+
+    const animate = (time: number) => {
+      if (!lastTime) lastTime = time;
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
+      setRotation(prev => ({
+        x: prev.x + rotationSpeed * (deltaTime / 1000),
+        y: prev.y + rotationSpeed * (deltaTime / 1000)
+      }));
+
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="tagcloud"
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        minWidth: radius * 3,
+        minHeight: radius * 3,
+        left: '25%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+      }}
+    >
+      {heroSkills.map((skill, i) => {
+        // Modified distribution to favor right side
+        const phi = Math.acos(-1 + (2 * i) / heroSkills.length);
+        const theta = Math.sqrt(heroSkills.length * Math.PI) * phi;
+        
+        // Increased radius multiplier and adjusted for right-side bias
+        const spreadRadius = radius * 2.5;
+        
+        // Calculate position with rotation and right-side bias
+        const x = spreadRadius * Math.cos(theta + rotation.x) * Math.sin(phi + rotation.y) + radius * 0.5;
+        const y = spreadRadius * Math.sin(theta + rotation.x) * Math.sin(phi + rotation.y);
+        const z = spreadRadius * Math.cos(phi + rotation.y);
+        
+        // Adjusted scale calculation for better visibility
+        const scale = 0.5 + ((z + spreadRadius) / (2 * spreadRadius)) * 0.8;
+        const opacity = 0.3 + (scale * 0.7);
+        const transform = `translate3d(${x}px, ${y}px, ${z}px) scale(${scale})`;
+
+        return (
+          <span
+            key={skill.name}
+            className="tagcloud--item"
+            style={{
+              willChange: 'transform, opacity, filter',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              zIndex: Math.floor(scale * 10),
+              opacity: opacity,
+              transformOrigin: '50% 50%',
+              transform: transform,
+              transition: 'all 0.3s ease-out',
+              cursor: 'pointer',
+              background: skill.color,
+              color: '#fff',
+              padding: '6px 12px',
+              borderRadius: '16px',
+              fontSize: '14px',
+              fontWeight: 600,
+              whiteSpace: 'nowrap',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              display: 'inline-block',
+              textAlign: 'center',
+              userSelect: 'none',
+            }}
+            onMouseEnter={(e) => {
+              const target = e.currentTarget;
+              target.style.transform = `${transform} scale(1.3)`;
+              target.style.zIndex = '100';
+              target.style.opacity = '1';
+              target.style.filter = 'brightness(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              const target = e.currentTarget;
+              target.style.transform = transform;
+              target.style.zIndex = Math.floor(scale * 10).toString();
+              target.style.opacity = opacity.toString();
+              target.style.filter = 'brightness(1)';
+            }}
+          >
+            {skill.name}
+          </span>
+        );
+      })}
+    </div>
+  );
+};
 
 const Hero = () => {
   const { theme } = useTheme();
@@ -123,6 +233,21 @@ const Hero = () => {
           pointer-events: none;
           filter: blur(32px) brightness(0.7);
         }
+        .tagcloud {
+          pointer-events: none;
+          perspective: 1000px;
+        }
+        .tagcloud--item {
+          pointer-events: auto;
+          filter: blur(0);
+          transition: all 0.3s ease-out;
+          backface-visibility: hidden;
+        }
+        .tagcloud--item:hover {
+          filter: blur(0) !important;
+          z-index: 100 !important;
+          transform-origin: center center !important;
+        }
       `}</style>
       <section
         id="home"
@@ -154,51 +279,18 @@ const Hero = () => {
                 100% { opacity: 1; }
               }
             `}</style>
-            {/* Skills shoot-out effect (z-10, under avatar) */}
-            <div className="absolute left-1/2 top-1/2 z-10 pointer-events-none" style={{ transform: 'translate(-50%, -50%)' }}>
-              {heroSkills.map((skill, i) => {
-                // Only use angles from -60° to +60° (fan to the right)
-                const minAngle = -60, maxAngle = 60;
-                const angle = minAngle + ((maxAngle - minAngle) * i) / (heroSkills.length - 1);
-                const rad = (angle * Math.PI) / 180;
-                const rStart = avatarRadius, rEnd = avatarRadius + 300;
-                const xStart = Math.cos(rad) * rStart, yStart = Math.sin(rad) * rStart;
-                const xEnd = Math.cos(rad) * rEnd, yEnd = Math.sin(rad) * rEnd;
-                return (
-                  <motion.div
-                    key={skill.name}
-                    initial={{ x: xStart, y: yStart, opacity: 0 }}
-                    animate={{ x: [xStart, xEnd], y: [yStart, yEnd], opacity: [1, 0] }}
-                    transition={{
-                      duration: 2.5,
-                      repeat: Infinity,
-                      repeatType: 'loop',
-                      delay: i * 0.18,
-                      ease: 'easeInOut',
-                    }}
-                    style={{ position: 'absolute', left: 0, top: 0, transform: 'translate(-50%, -50%)' }}
-                  >
-                    <span
-                      style={{
-                        background: skill.color,
-                        color: '#fff',
-                        borderRadius: 8,
-                        padding: '4px 12px',
-                        fontSize: 14,
-                        fontWeight: 600,
-                        boxShadow: '0 2px 8px #0008',
-                        whiteSpace: 'nowrap',
-                        letterSpacing: 0.5,
-                        opacity: 0.92,
-                        display: 'inline-block',
-                        textAlign: 'center',
-                      }}
-                    >
-                      {skill.name}
-                    </span>
-                  </motion.div>
-                );
-              })}
+            {/* Updated container for tag cloud with right positioning */}
+            <div 
+              className="absolute left-1/2 top-1/2 z-10" 
+              style={{ 
+                transform: 'translate(-25%, -50%)',
+                width: '100%',
+                height: '100%',
+                maxWidth: '1000px',
+                maxHeight: '800px',
+              }}
+            >
+              <TagCloud radius={avatarRadius + 50} />
             </div>
           </>
         )}
@@ -399,11 +491,11 @@ const Hero = () => {
             }}
           >
             <a href="#projects" className="flex flex-col items-center text-muted-foreground">
-              <span className="text-sm mb-2">Scroll Down</span>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {/* <span className="text-sm mb-2">Scroll Down</span> */}
+              {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <polyline points="19 12 12 19 5 12"></polyline>
-              </svg>
+              </svg> */}
             </a>
           </motion.div>
         </div>
