@@ -1,62 +1,92 @@
 import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+// Typewriter component
+const Typewriter = ({ text }: { text: string }) => {
+  const [displayed, setDisplayed] = useState("");
+  useEffect(() => {
+    let i = 0;
+    let forward = true;
+    let timeout: NodeJS.Timeout;
+    function typeLoop() {
+      if (forward) {
+        if (i <= text.length) {
+          setDisplayed(text.slice(0, i));
+          i++;
+          timeout = setTimeout(typeLoop, 60);
+        } else {
+          forward = false;
+          timeout = setTimeout(typeLoop, 1200);
+        }
+      } else {
+        if (i >= 0) {
+          setDisplayed(text.slice(0, i));
+          i--;
+          timeout = setTimeout(typeLoop, 30);
+        } else {
+          forward = true;
+          timeout = setTimeout(typeLoop, 600);
+        }
+      }
+    }
+    typeLoop();
+    return () => clearTimeout(timeout);
+  }, [text]);
+  return (
+    <span>
+      {displayed}
+      <span className="blinking-cursor">|</span>
+    </span>
+  );
+};
+
+// Add your main skills here (or import from Skills.tsx if you want to keep in sync)
+const heroSkills = [
+  { name: "Python", color: "#3572A5" },
+  { name: "Django", color: "#092E20" },
+  { name: "Flask", color: "#000000" },
+  { name: "Selenium", color: "#43B02A" },
+  { name: "MongoDB", color: "#47A248" },
+  { name: "MySQL", color: "#00758F" },
+  { name: "BeautifulSoup", color: "#4B8BBE" },
+  { name: "Numpy", color: "#013243" },
+  { name: "Pandas", color: "#150458" },
+  { name: "Web Scraping", color: "#e63946" },
+  { name: "AI", color: "#8b5cf6" },
+  { name: "Machine Learning", color: "#f59e42" },
+  { name: "LLM", color: "#eab308" },
+  { name: "Git", color: "#F05032" },
+  { name: "Linux", color: "#FCC624" },
+];
 
 const Hero = () => {
   const { theme } = useTheme();
-
-  // Typewriter effect for the subtitle
-  const fullSubtitle = "I'm a Python Developer";
-  const [typedSubtitle, setTypedSubtitle] = useState("");
+  const avatarRef = useRef<HTMLDivElement>(null);
+  const [avatarRadius, setAvatarRadius] = useState(160); // default for md:w-80
 
   useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      setTypedSubtitle(fullSubtitle.slice(0, i + 1));
-      i++;
-      if (i === fullSubtitle.length) clearInterval(interval);
-    }, 60);
-    return () => clearInterval(interval);
+    function updateRadius() {
+      if (avatarRef.current) {
+        setAvatarRadius(avatarRef.current.offsetWidth / 2);
+      }
+    }
+    updateRadius();
+    window.addEventListener('resize', updateRadius);
+    return () => window.removeEventListener('resize', updateRadius);
   }, []);
 
-  // Typewriter component for About Me
-  const Typewriter = ({ text }: { text: string }) => {
-    const [displayed, setDisplayed] = useState("");
-    useEffect(() => {
-      let i = 0;
-      let forward = true;
-      let timeout: NodeJS.Timeout;
-      function typeLoop() {
-        if (forward) {
-          if (i <= text.length) {
-            setDisplayed(text.slice(0, i));
-            i++;
-            timeout = setTimeout(typeLoop, 60);
-          } else {
-            forward = false;
-            timeout = setTimeout(typeLoop, 1200);
-          }
-        } else {
-          if (i >= 0) {
-            setDisplayed(text.slice(0, i));
-            i--;
-            timeout = setTimeout(typeLoop, 30);
-          } else {
-            forward = true;
-            timeout = setTimeout(typeLoop, 600);
-          }
-        }
-      }
-      typeLoop();
-      return () => clearTimeout(timeout);
-    }, [text]);
-    return (
-      <span>
-        {displayed}
-        <span className="blinking-cursor">|</span>
-      </span>
-    );
-  };
+  // Galaxy effect: generate 60 stars with random positions and sizes
+  const starCount = 60;
+  const stars = Array.from({ length: starCount }, (_, i) => ({
+    id: i,
+    top: Math.random() * 100,
+    left: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    duration: Math.random() * 2 + 1.5,
+    delay: Math.random() * 2,
+    opacity: Math.random() * 0.5 + 0.5,
+  }));
 
   return (
     <>
@@ -70,12 +100,109 @@ const Hero = () => {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
         }
+        .galaxy-star {
+          position: absolute;
+          border-radius: 9999px;
+          background: white;
+          pointer-events: none;
+          filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #7f7fff);
+        }
+        .galaxy-nebula {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 60vw;
+          height: 60vw;
+          max-width: 900px;
+          max-height: 900px;
+          transform: translate(-50%, -50%);
+          background: radial-gradient(ellipse at 60% 40%, #7f7fff44 0%, #0000 70%),
+                      radial-gradient(ellipse at 30% 70%, #e0aaff33 0%, #0000 80%),
+                      radial-gradient(ellipse at 80% 80%, #fff2 0%, #0000 60%);
+          z-index: 0;
+          pointer-events: none;
+          filter: blur(32px) brightness(0.7);
+        }
       `}</style>
       <section
         id="home"
-        className="min-h-screen flex items-center justify-center pt-16 pb-12 px-4"
+        className="min-h-screen flex items-center justify-center pt-16 pb-12 px-4 relative overflow-hidden"
       >
-        <div className="container mx-auto">
+        {/* Galaxy effect only in dark mode */}
+        {theme === 'dark' && (
+          <>
+            <div className="galaxy-nebula" />
+            {stars.map(star => (
+              <div
+                key={star.id}
+                className="galaxy-star"
+                style={{
+                  top: `${star.top}%`,
+                  left: `${star.left}%`,
+                  width: `${star.size}px`,
+                  height: `${star.size}px`,
+                  opacity: star.opacity,
+                  animation: `twinkle ${star.duration}s infinite alternate`,
+                  animationDelay: `${star.delay}s`,
+                  zIndex: 1,
+                }}
+              />
+            ))}
+            <style>{`
+              @keyframes twinkle {
+                0% { opacity: 0.5; }
+                100% { opacity: 1; }
+              }
+            `}</style>
+            {/* Skills shoot-out effect (z-10, under avatar) */}
+            <div className="absolute left-1/2 top-1/2 z-10 pointer-events-none" style={{ transform: 'translate(-50%, -50%)' }}>
+              {heroSkills.map((skill, i) => {
+                // Only use angles from -60° to +60° (fan to the right)
+                const minAngle = -60, maxAngle = 60;
+                const angle = minAngle + ((maxAngle - minAngle) * i) / (heroSkills.length - 1);
+                const rad = (angle * Math.PI) / 180;
+                const rStart = avatarRadius, rEnd = avatarRadius + 300;
+                const xStart = Math.cos(rad) * rStart, yStart = Math.sin(rad) * rStart;
+                const xEnd = Math.cos(rad) * rEnd, yEnd = Math.sin(rad) * rEnd;
+                return (
+                  <motion.div
+                    key={skill.name}
+                    initial={{ x: xStart, y: yStart, opacity: 0 }}
+                    animate={{ x: [xStart, xEnd], y: [yStart, yEnd], opacity: [1, 0] }}
+                    transition={{
+                      duration: 2.5,
+                      repeat: Infinity,
+                      repeatType: 'loop',
+                      delay: i * 0.18,
+                      ease: 'easeInOut',
+                    }}
+                    style={{ position: 'absolute', left: 0, top: 0, transform: 'translate(-50%, -50%)' }}
+                  >
+                    <span
+                      style={{
+                        background: skill.color,
+                        color: '#fff',
+                        borderRadius: 8,
+                        padding: '4px 12px',
+                        fontSize: 14,
+                        fontWeight: 600,
+                        boxShadow: '0 2px 8px #0008',
+                        whiteSpace: 'nowrap',
+                        letterSpacing: 0.5,
+                        opacity: 0.92,
+                        display: 'inline-block',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {skill.name}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </>
+        )}
+        <div className="container mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <motion.div
               className="order-2 md:order-1"
@@ -105,8 +232,7 @@ const Hero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <span>{typedSubtitle}</span>
-                <span className="blinking-cursor">|</span>
+                <Typewriter text="I'm a Python Developer" />
               </motion.h2>
               <motion.p
                 className="text-lg text-muted-foreground mb-8 max-w-lg"
@@ -186,12 +312,12 @@ const Hero = () => {
               </div>
             </motion.div>
             <motion.div
-              className="order-1 md:order-2 flex justify-center"
+              className="order-1 md:order-2 flex justify-center z-20"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <div ref={avatarRef} className="relative w-64 h-64 md:w-80 md:h-80">
                 <motion.div
                   className="absolute inset-0 rounded-full bg-gradient-to-br from-primary via-accent to-secondary opacity-70"
                   animate={{
