@@ -175,7 +175,7 @@ const Footer = () => {
             </div>
             <div className="text-center md:text-right">
               <p className="text-sm text-muted-foreground">
-                Made with <span className="text-[#e63946] animate-pulse">❤️</span> using React & TypeScript
+                Made with <span className="text-[#e63946] animate-pulse">❤️</span> by Rishav Raj
               </p>
             </div>
           </div>
