@@ -42,52 +42,127 @@ const Typewriter = ({ text }: { text: string }) => {
 
 const Education = () => {
   return (
-    <section id="education" className="py-20 px-4 bg-background">
-      <div className="container mx-auto max-w-5xl">
+    <section id="education" className="py-20 lg:py-32 px-4 bg-background section-bg-gradient">
+      <div className="container mx-auto max-w-6xl">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold mb-12 text-center text-foreground"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          className="text-3xl md:text-4xl lg:text-5xl font-bold mb-12 lg:mb-20 text-center text-foreground"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
-          <span className="highlight-gradient"><Typewriter text="Education" /></span>
+          <span className="gradient-text"><Typewriter text="Education" /></span>
         </motion.h2>
-        <div className="relative flex flex-col md:grid grid-cols-9 mx-auto p-2 text-gray-50">
-          {/* B.Tech */}
-          <div className="flex md:contents">
-            <div className="col-start-1 col-end-5 p-4 rounded-xl my-4 ml-auto border-2 border-[#e63946] bg-background text-left shadow-md">
-              <h3 className="font-bold text-lg text-[#e63946] mb-1">B.Tech (Computer Science and Engineering)</h3>
-              <div className="font-semibold text-base mb-1 text-foreground">Maharishi University of Information Technology, Noida, Uttar Pradesh</div>
-              <div className="text-sm text-muted-foreground mb-1">2018 – 2022</div>
-              <div className="text-sm text-primary font-medium">Percentage: 75%</div>
-            </div>
-            <div className="col-start-5 col-end-6 md:mx-auto relative mr-10">
-              <div className="h-full w-6 flex items-center justify-center">
-                <div className="h-full w-1 bg-[#e63946] pointer-events-none"></div>
+        
+        {/* Mobile-first responsive timeline */}
+        <div className="relative">
+          {/* Timeline line - hidden on mobile, visible on md+ */}
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-primary via-accent to-secondary"></div>
+          
+          {/* Mobile timeline line */}
+          <div className="md:hidden absolute left-8 top-0 h-full w-1 bg-gradient-to-b from-primary via-accent to-secondary"></div>
+
+          <div className="space-y-12 md:space-y-16">
+            {/* B.Tech */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              {/* Mobile layout */}
+              <div className="md:hidden flex items-start">
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mr-6 shadow-2xl">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
+                  </svg>
+                </div>
+                <div className="glass-card p-6 flex-1 card-hover-effect">
+                  <h3 className="font-bold text-lg md:text-xl text-[#e63946] mb-2">B.Tech (Computer Science and Engineering)</h3>
+                  <div className="font-semibold text-sm md:text-base mb-2 text-foreground">Maharishi University of Information Technology, Noida, Uttar Pradesh</div>
+                  <div className="text-sm text-muted-foreground mb-2">2018 – 2022</div>
+                  <div className="text-sm text-primary font-medium">Percentage: 75%</div>
+                </div>
               </div>
-              <div className="w-6 h-6 absolute top-1/2 -mt-3 rounded-full bg-background border-2 border-[#e63946] flex items-center justify-center text-[#e63946]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" /></svg>
+
+              {/* Desktop layout */}
+              <div className="hidden md:flex">
+                <div className="w-1/2 pr-8 text-right">
+                  <motion.div
+                    className="glass-card p-6 card-hover-effect"
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <h3 className="font-bold text-xl lg:text-2xl text-[#e63946] mb-3">B.Tech (Computer Science and Engineering)</h3>
+                    <div className="font-semibold text-base lg:text-lg mb-2 text-foreground">Maharishi University of Information Technology, Noida, Uttar Pradesh</div>
+                    <div className="text-sm lg:text-base text-muted-foreground mb-2">2018 – 2022</div>
+                    <div className="text-sm lg:text-base text-primary font-medium">Percentage: 75%</div>
+                  </motion.div>
+                </div>
+                
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center shadow-2xl z-10">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
+                  </svg>
+                </div>
+                
+                <div className="w-1/2 pl-8"></div>
               </div>
-            </div>
-          </div>
-          {/* Intermediate */}
-          <div className="flex md:contents">
-            <div className="col-start-5 col-end-6 md:mx-auto relative ml-10">
-              <div className="h-full w-6 flex items-center justify-center">
-                <div className="h-full w-1 bg-[#e63946] pointer-events-none"></div>
+            </motion.div>
+
+            {/* Intermediate */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              {/* Mobile layout */}
+              <div className="md:hidden flex items-start">
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-accent to-secondary rounded-full flex items-center justify-center mr-6 shadow-2xl">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
+                  </svg>
+                </div>
+                <div className="glass-card p-6 flex-1 card-hover-effect">
+                  <h3 className="font-bold text-lg md:text-xl text-[#e63946] mb-2">Intermediate (Science)</h3>
+                  <div className="font-semibold text-sm md:text-base mb-2 text-foreground">K. R. BOSE SMARAK COLLEGE, Muzaffarpur, Bihar</div>
+                  <div className="text-sm text-muted-foreground mb-2">2015 – 2017</div>
+                  <div className="text-sm text-primary font-medium">Percentage: 60%</div>
+                </div>
               </div>
-              <div className="w-6 h-6 absolute top-1/2 -mt-3 rounded-full bg-background border-2 border-[#e63946] flex items-center justify-center text-[#e63946]">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" /></svg>
+
+              {/* Desktop layout */}
+              <div className="hidden md:flex">
+                <div className="w-1/2 pr-8"></div>
+                
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-accent to-secondary rounded-full flex items-center justify-center shadow-2xl z-10">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
+                  </svg>
+                </div>
+                
+                <div className="w-1/2 pl-8">
+                  <motion.div
+                    className="glass-card p-6 card-hover-effect"
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <h3 className="font-bold text-xl lg:text-2xl text-[#e63946] mb-3">Intermediate (Science)</h3>
+                    <div className="font-semibold text-base lg:text-lg mb-2 text-foreground">K. R. BOSE SMARAK COLLEGE, Muzaffarpur, Bihar</div>
+                    <div className="text-sm lg:text-base text-muted-foreground mb-2">2015 – 2017</div>
+                    <div className="text-sm lg:text-base text-primary font-medium">Percentage: 60%</div>
+                  </motion.div>
+                </div>
               </div>
-            </div>
-            <div className="col-start-6 col-end-10 p-4 rounded-xl my-4 mr-auto border-2 border-[#e63946] bg-background text-left shadow-md">
-              <h3 className="font-bold text-lg text-[#e63946] mb-1">Intermediate (Science)</h3>
-              <div className="font-semibold text-base mb-1 text-foreground">K. R. BOSE SMARAK COLLEGE, Muzaffarpur, Bihar</div>
-              <div className="text-sm text-muted-foreground mb-1">2015 – 2017</div>
-              <div className="text-sm text-primary font-medium">Percentage: 60%</div>
-            </div>
+            </motion.div>
           </div>
         </div>
+        
         <style>{`
           .blinking-cursor {
             display: inline-block;
@@ -104,4 +179,4 @@ const Education = () => {
   );
 };
 
-export default Education; 
+export default Education;
