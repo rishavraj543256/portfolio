@@ -45,7 +45,7 @@ const Typewriter = ({ text }: { text: string }) => {
 const heroSkills = [
   { name: "Python", color: "#3572A5", size: 1.2 },
   { name: "Django", color: "#092E20", size: 1.1 },
-  { name: "Flask", color: "#000000", size: 1.1 },
+  { name: "Flask", color: "#FFFFFF", size: 1.1 }, // Changed to white for better visibility
   { name: "Selenium", color: "#43B02A", size: 1.0 },
   { name: "MongoDB", color: "#47A248", size: 1.1 },
   { name: "MySQL", color: "#00758F", size: 1.0 },
@@ -61,7 +61,7 @@ const heroSkills = [
 ];
 
 // Enhanced Tag Cloud component
-const TagCloud = ({ radius = 200 }) => {
+const TagCloud = ({ radius = 200, theme = 'dark' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
 
@@ -113,8 +113,17 @@ const TagCloud = ({ radius = 200 }) => {
         const z = spreadRadius * Math.cos(phi + rotation.y);
         
         const scale = 0.5 + ((z + spreadRadius) / (2 * spreadRadius)) * 0.8;
-        const opacity = 0.4 + (scale * 0.6);
+        const opacity = theme === 'light' ? 0.6 + (scale * 0.4) : 0.4 + (scale * 0.6);
         const transform = `translate3d(${x}px, ${y}px, ${z}px) scale(${scale})`;
+
+        // Adjust colors for light mode
+        let skillColor = skill.color;
+        if (theme === 'light') {
+          if (skill.name === 'Flask') skillColor = '#000000'; // Black for Flask in light mode
+          if (skill.name === 'Django') skillColor = '#0C4B33'; // Darker green for Django
+          if (skill.name === 'Numpy') skillColor = '#4A90E2'; // Brighter blue for Numpy
+          if (skill.name === 'Pandas') skillColor = '#E91E63'; // Pink for Pandas
+        }
 
         return (
           <motion.span
@@ -131,23 +140,30 @@ const TagCloud = ({ radius = 200 }) => {
               transform: transform,
               transition: 'all 0.3s ease-out',
               cursor: 'pointer',
-              background: `linear-gradient(135deg, ${skill.color}, ${skill.color}dd)`,
-              color: '#fff',
+              background: theme === 'light' 
+                ? `linear-gradient(135deg, ${skillColor}, ${skillColor}dd)` 
+                : `linear-gradient(135deg, ${skillColor}, ${skillColor}dd)`,
+              color: theme === 'light' && (skill.name === 'Flask' || skill.name === 'Django') ? '#fff' : '#fff',
               padding: '8px 16px',
               borderRadius: '20px',
               fontSize: '14px',
               fontWeight: 600,
               whiteSpace: 'nowrap',
-              boxShadow: `0 4px 20px ${skill.color}40, 0 0 0 1px ${skill.color}20`,
+              boxShadow: theme === 'light' 
+                ? `0 4px 20px ${skillColor}40, 0 0 0 1px ${skillColor}20, 0 2px 10px rgba(0,0,0,0.1)`
+                : `0 4px 20px ${skillColor}40, 0 0 0 1px ${skillColor}20`,
               display: 'inline-block',
               textAlign: 'center',
               userSelect: 'none',
               backdropFilter: 'blur(10px)',
+              border: theme === 'light' ? `1px solid ${skillColor}30` : 'none',
             }}
             whileHover={{
               scale: 1.4,
               zIndex: 100,
-              boxShadow: `0 8px 30px ${skill.color}60, 0 0 0 2px ${skill.color}40`,
+              boxShadow: theme === 'light' 
+                ? `0 8px 30px ${skillColor}60, 0 0 0 2px ${skillColor}40, 0 4px 20px rgba(0,0,0,0.2)`
+                : `0 8px 30px ${skillColor}60, 0 0 0 2px ${skillColor}40`,
               filter: 'brightness(1.2)',
             }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -176,7 +192,7 @@ const Hero = () => {
     return () => window.removeEventListener('resize', updateRadius);
   }, []);
 
-  // Enhanced galaxy effect
+  // Enhanced galaxy effect for dark mode
   const starCount = 80;
   const stars = Array.from({ length: starCount }, (_, i) => ({
     id: i,
@@ -252,7 +268,7 @@ const Hero = () => {
         id="home"
         className="min-h-screen flex items-center justify-center pt-16 pb-12 px-4 relative overflow-hidden section-bg-gradient"
       >
-        {/* Enhanced galaxy effect */}
+        {/* Galaxy effect for dark mode */}
         {theme === 'dark' && (
           <>
             <div className="galaxy-nebula" />
@@ -280,20 +296,6 @@ const Hero = () => {
                 }}
               />
             ))}
-            
-            {/* Enhanced container for tag cloud */}
-            <div 
-              className="absolute left-1/2 top-1/2 z-10" 
-              style={{ 
-                transform: 'translate(-25%, -50%)',
-                width: '100%',
-                height: '100%',
-                maxWidth: '1000px',
-                maxHeight: '800px',
-              }}
-            >
-              <TagCloud radius={avatarRadius + 50} />
-            </div>
           </>
         )}
 
@@ -323,6 +325,20 @@ const Hero = () => {
             ))}
           </div>
         )}
+
+        {/* Skills Tag Cloud - Now appears in BOTH themes */}
+        <div 
+          className="absolute left-1/2 top-1/2 z-10" 
+          style={{ 
+            transform: 'translate(-25%, -50%)',
+            width: '100%',
+            height: '100%',
+            maxWidth: '1000px',
+            maxHeight: '800px',
+          }}
+        >
+          <TagCloud radius={avatarRadius + 50} theme={theme} />
+        </div>
 
         <div className="container mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
