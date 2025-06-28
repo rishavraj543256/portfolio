@@ -10,7 +10,7 @@ interface Skill {
   category: SkillCategory | SkillCategory[];
 }
 
-// Skills data - Only skills found in the resume
+// Skills data
 const skills: Skill[] = [
   // Frontend
   { name: "HTML", icon: "/icons/html.svg", category: ["frontend", "all"] },
@@ -41,10 +41,6 @@ const skills: Skill[] = [
   { name: "Linux", icon: "/icons/linux.svg", category: ["all"] },
 ];
 
-// Note: After removing skills that aren't in your resume, make sure to:
-// 1. Delete the entire skill entry (the full line)
-// 2. If you remove all skills from a category (e.g., all AI skills), you can also remove the corresponding category button below
-
 // Typewriter component
 const Typewriter = ({ text }: { text: string }) => {
   const [displayed, setDisplayed] = useState("");
@@ -61,7 +57,7 @@ const Typewriter = ({ text }: { text: string }) => {
           timeout = setTimeout(typeLoop, 60);
         } else {
           forward = false;
-          timeout = setTimeout(typeLoop, 1200); // Wait before erasing
+          timeout = setTimeout(typeLoop, 1200);
         }
       } else {
         if (i >= 0) {
@@ -70,7 +66,7 @@ const Typewriter = ({ text }: { text: string }) => {
           timeout = setTimeout(typeLoop, 30);
         } else {
           forward = true;
-          timeout = setTimeout(typeLoop, 600); // Wait before typing again
+          timeout = setTimeout(typeLoop, 600);
         }
       }
     }
@@ -88,15 +84,6 @@ const Typewriter = ({ text }: { text: string }) => {
 const Skills = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeCategory, setActiveCategory] = useState<SkillCategory>("all");
-
-  // Animation state for looping title animation
-  const [showTitle, setShowTitle] = useState(true);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShowTitle((prev) => !prev);
-    }, 2500); // 2.5 seconds interval
-    return () => clearInterval(interval);
-  }, []);
 
   // Check if we have skills in each category
   const hasBackendSkills = skills.some(skill => 
@@ -117,99 +104,192 @@ const Skills = () => {
       : skill.category === activeCategory
   );
 
+  const categoryColors = {
+    all: "from-[#f43f5e] to-[#e11d48]",
+    frontend: "from-[#0ea5e9] to-[#0284c7]",
+    backend: "from-[#10b981] to-[#059669]",
+    ai: "from-[#8b5cf6] to-[#7c3aed]"
+  };
+
   return (
-    <section id="skills" className="py-20 px-4 relative bg-background" ref={sectionRef}>
+    <section id="skills" className="py-24 px-4 relative bg-background section-bg-gradient" ref={sectionRef}>
       <div className="container mx-auto">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold mb-4 text-center text-foreground"
-          initial={{ opacity: 0, y: 20 }}
+          className="text-4xl md:text-5xl font-bold mb-6 text-center text-foreground"
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
         >
-          <span className="highlight-gradient"><Typewriter text="Skills" /></span>
+          <span className="gradient-text"><Typewriter text="Skills" /></span>
         </motion.h2>
 
-        {/* Category selection - Categories will automatically hide if no skills exist in that category */}
-        <div className="flex justify-center gap-4 mb-12 flex-wrap">
-          <button
+        <motion.p
+          className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto text-lg"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          Technologies and tools I use to bring ideas to life
+        </motion.p>
+
+        {/* Enhanced Category selection */}
+        <motion.div 
+          className="flex justify-center gap-4 mb-16 flex-wrap"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <motion.button
             onClick={() => setActiveCategory("all")}
-            className={`px-6 py-2 rounded-full transition-all ${
+            className={`px-8 py-3 rounded-2xl transition-all duration-300 font-semibold ${
               activeCategory === "all" 
-                ? "bg-[#f43f5e] text-white" 
-                : "bg-[#1e293b] text-white hover:bg-[#1e293b]/80"
+                ? `bg-gradient-to-r ${categoryColors.all} text-white shadow-2xl` 
+                : "bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground"
             }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             ALL
-          </button>
+          </motion.button>
           
           {hasFrontendSkills && (
-            <button
+            <motion.button
               onClick={() => setActiveCategory("frontend")}
-              className={`px-6 py-2 rounded-full transition-all ${
+              className={`px-8 py-3 rounded-2xl transition-all duration-300 font-semibold ${
                 activeCategory === "frontend" 
-                  ? "bg-[#0ea5e9] text-white" 
-                  : "bg-[#1e293b] text-white hover:bg-[#1e293b]/80"
+                  ? `bg-gradient-to-r ${categoryColors.frontend} text-white shadow-2xl` 
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground"
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               FRONTEND
-            </button>
+            </motion.button>
           )}
           
           {hasBackendSkills && (
-            <button
+            <motion.button
               onClick={() => setActiveCategory("backend")}
-              className={`px-6 py-2 rounded-full transition-all ${
+              className={`px-8 py-3 rounded-2xl transition-all duration-300 font-semibold ${
                 activeCategory === "backend" 
-                  ? "bg-[#10b981] text-white" 
-                  : "bg-[#1e293b] text-white hover:bg-[#1e293b]/80"
+                  ? `bg-gradient-to-r ${categoryColors.backend} text-white shadow-2xl` 
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground"
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               BACKEND
-            </button>
+            </motion.button>
           )}
           
           {hasAISkills && (
-            <button
+            <motion.button
               onClick={() => setActiveCategory("ai")}
-              className={`px-6 py-2 rounded-full transition-all ${
+              className={`px-8 py-3 rounded-2xl transition-all duration-300 font-semibold ${
                 activeCategory === "ai" 
-                  ? "bg-[#8b5cf6] text-white" 
-                  : "bg-[#1e293b] text-white hover:bg-[#1e293b]/80"
+                  ? `bg-gradient-to-r ${categoryColors.ai} text-white shadow-2xl` 
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground"
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               AI & ML
-            </button>
+            </motion.button>
           )}
-        </div>
+        </motion.div>
 
-        {/* Skills grid */}
+        {/* Enhanced Skills grid */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6"
+          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
         >
           {filteredSkills.map((skill, index) => (
-              <motion.div
+            <motion.div
               key={skill.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className="flex flex-col items-center justify-center bg-[#13191f] rounded-lg p-4 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1"
+              initial={{ opacity: 0, y: 30, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ 
+                delay: index * 0.05,
+                type: "spring",
+                stiffness: 100,
+                damping: 15
+              }}
+              className="group"
             >
-              <div className="h-16 w-16 flex items-center justify-center mb-3">
-                <img 
-                  src={skill.icon} 
-                  alt={skill.name} 
-                  className="h-12 w-12 object-contain" 
-                />
-              </div>
-              <span className="text-sm text-gray-300 font-medium text-center">{skill.name}</span>
+              <motion.div
+                className="flex flex-col items-center justify-center glass-card p-6 h-32 hover:shadow-2xl transition-all duration-500 card-hover-effect"
+                whileHover={{ 
+                  y: -8,
+                  scale: 1.05,
+                  rotateY: 10,
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div 
+                  className="h-12 w-12 flex items-center justify-center mb-3 relative"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <img 
+                    src={skill.icon} 
+                    alt={skill.name} 
+                    className="h-10 w-10 object-contain group-hover:drop-shadow-lg transition-all duration-300" 
+                  />
+                  
+                  {/* Glow effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </motion.div>
+                
+                <span className="text-sm text-foreground font-semibold text-center group-hover:text-primary transition-colors duration-300">
+                  {skill.name}
+                </span>
               </motion.div>
-            ))}
+            </motion.div>
+          ))}
         </motion.div>
+
+        {/* Floating background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                x: [0, Math.random() * 20 - 10, 0],
+                opacity: [0.1, 0.3, 0.1],
+                scale: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: Math.random() * 8 + 5,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
       </div>
+      
       <style>{`
         .blinking-cursor {
           display: inline-block;
