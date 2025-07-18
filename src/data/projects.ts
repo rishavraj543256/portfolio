@@ -9,59 +9,50 @@ export interface Project {
   repoUrl?: string;
 }
 
-export const projects: Project[] = [
+export const projects = [
   {
     id: 1,
-    title: "Portfolio Website",
-    description: "A modern portfolio website with smooth animations built using React and Tailwind CSS.",
-    image: "/placeholder.svg",
-    tags: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
-    demoUrl: "#",
-    repoUrl: "#"
+    title: "Tool_Final_excel",
+    description: "A project folder named Tool_Final_excel. Description and details to be updated.",
+    tags: ["Python", "pandas", "openpyxl", "Excel Automation"],
+    image: "",
+    demoUrl: "",
+    repoUrl: ""
   },
   {
     id: 2,
-    title: "E-Commerce Dashboard",
-    description: "Admin dashboard for managing an e-commerce platform with analytics and inventory management.",
-    image: "/placeholder.svg",
-    tags: ["React", "Node.js", "MongoDB", "Chart.js"],
-    demoUrl: "#",
-    repoUrl: "#"
+    title: "Nivea_Projects-master",
+    description: "A project folder named Nivea_Projects-master. Description and details to be updated.",
+    tags: ["Python", "BeautifulSoup", "requests", "pandas", "openpyxl", "google-api-python-client", "PyPDF2", "python-docx"],
+    image: "",
+    demoUrl: "",
+    repoUrl: ""
   },
   {
     id: 3,
-    title: "Travel Blog App",
-    description: "A blog application focused on travel experiences with a rich text editor and image management.",
-    image: "/placeholder.svg",
-    tags: ["Next.js", "PostgreSQL", "Tailwind CSS", "AWS S3"],
-    demoUrl: "#",
-    repoUrl: "#"
+    title: "E-Filing_Project",
+    description: "A project folder named E-Filing_Project. Description and details to be updated.",
+    tags: ["Python", "Django", "Flask", "pandas", "openpyxl", "selenium", "streamlit", "GitPython", "matplotlib", "pyarrow"],
+    image: "",
+    demoUrl: "",
+    repoUrl: ""
   },
   {
     id: 4,
-    title: "Task Management App",
-    description: "A drag and drop task management application with real-time updates and collaboration features.",
-    image: "/placeholder.svg",
-    tags: ["React", "Firebase", "Redux", "Styled Components"],
-    demoUrl: "#",
-    repoUrl: "#"
+    title: "Coca_Cola_Projects-master",
+    description: "A project folder named Coca_Cola_Projects-master. Description and details to be updated.",
+    tags: ["Python", "tkinter", "pandas", "pdfplumber", "PyInstaller"],
+    image: "",
+    demoUrl: "",
+    repoUrl: ""
   },
   {
     id: 5,
-    title: "Weather Forecast App",
-    description: "A beautiful weather application with animated visualizations and 7-day forecasts.",
-    image: "/placeholder.svg",
-    tags: ["React", "TypeScript", "OpenWeather API", "D3.js"],
-    demoUrl: "#",
-    repoUrl: "#"
-  },
-  {
-    id: 6,
-    title: "Music Player",
-    description: "A sleek music player with visualizations and playlist management.",
-    image: "/placeholder.svg",
-    tags: ["React", "Electron", "Node.js", "Web Audio API"],
-    demoUrl: "#",
-    repoUrl: "#"
+    title: "adani_report_processing-master",
+    description: "A project folder named adani_report_processing-master. Description and details to be updated.",
+    tags: ["Python", "pandas", "openpyxl", "xlrd", "pyinstaller"],
+    image: "",
+    demoUrl: "",
+    repoUrl: ""
   }
 ];

@@ -151,6 +151,10 @@ const AboutMe = () => {
                   delay: 0.5
                 },
                 {
+                  text: "With a passion for both teamwork and independent work, I regularly take on freelance projects across various industries.",
+                  delay: 0.55
+                },
+                {
                   text: "I am always eager to tackle new challenges and contribute to innovative projects that make a real difference.",
                   delay: 0.6
                 }
