@@ -4,18 +4,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import AboutMe from "@/components/AboutMe";
+import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import Education from "@/components/Education";
 import GitHubStats from "@/components/GitHubStats";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import Chatbot from "@/components/Chatbot";
 
 const Index = () => {
   useEffect(() => {
     // Set page title
     document.title = "Rishav Raj - Python Developer | Portfolio";
-    
+
     // Add meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -86,25 +88,27 @@ const Index = () => {
               />
             ))}
           </div>
-          
+
           {/* Skip to main content for accessibility */}
-          <a 
-            href="#main-content" 
+          <a
+            href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-lg z-50"
           >
             Skip to main content
           </a>
-          
+
           <Navbar />
           <main id="main-content" className="focus:outline-none" tabIndex={-1}>
             <Hero />
             <AboutMe />
+            <Experience />
             <Projects />
             <Skills />
             <Education />
             <GitHubStats />
             <Contact />
           </main>
+          <Chatbot />
           <Footer />
 
           {/* Loading indicator for better UX */}

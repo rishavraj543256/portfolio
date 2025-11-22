@@ -28,6 +28,7 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
+    { name: "Experience", href: "#experience" },
     { name: "Projects", href: "#projects" },
     { name: "Skills", href: "#skills" },
     { name: "Contact", href: "#contact" },
@@ -35,16 +36,15 @@ const Navbar = () => {
 
   return (
     <motion.header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/90 backdrop-blur-xl shadow-2xl border-b border-border/50" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/70 backdrop-blur-2xl shadow-lg border-b border-white/10 supports-[backdrop-filter]:bg-background/60" : "bg-transparent"
+        }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
-          <motion.div 
+          <motion.div
             className="text-2xl font-bold gradient-text"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -119,9 +119,9 @@ const Navbar = () => {
         <motion.nav
           className={`lg:hidden overflow-hidden ${mobileMenuOpen ? 'block' : 'hidden'}`}
           initial={{ opacity: 0, height: 0 }}
-          animate={{ 
-            opacity: mobileMenuOpen ? 1 : 0, 
-            height: mobileMenuOpen ? "auto" : 0 
+          animate={{
+            opacity: mobileMenuOpen ? 1 : 0,
+            height: mobileMenuOpen ? "auto" : 0
           }}
           transition={{ duration: 0.3 }}
         >

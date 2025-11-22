@@ -1,0 +1,24 @@
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+[36mvite v5.4.19 [32mbuilding for production...[36m[39m
+transforming...
+Browserslist: browsers data (caniuse-lite) is 13 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✓[39m 3 modules transformed.
+[31mx[39m Build failed in 2.44s
+[31merror during build:
+[31m[vite:css] [postcss] C:/Users/risha/Desktop/apps/portfolio/src/index.css:1:5: Unexpected }[31m
+file: [36mC:/Users/risha/Desktop/apps/portfolio/src/index.css:1:4[31m
+    at Input.error (C:\Users\risha\Desktop\apps\portfolio\node_modules\postcss\lib\input.js:106:16)
+    at Parser.unexpectedClose (C:\Users\risha\Desktop\apps\portfolio\node_modules\postcss\lib\parser.js:585:22)
+    at Parser.end (C:\Users\risha\Desktop\apps\portfolio\node_modules\postcss\lib\parser.js:330:12)
+    at Parser.parse (C:\Users\risha\Desktop\apps\portfolio\node_modules\postcss\lib\parser.js:454:16)
+    at parse (C:\Users\risha\Desktop\apps\portfolio\node_modules\postcss\lib\parse.js:11:12)
+    at new LazyResult (C:\Users\risha\Desktop\apps\portfolio\node_modules\postcss\lib\lazy-result.js:133:16)
+    at Processor.process (C:\Users\risha\Desktop\apps\portfolio\node_modules\postcss\lib\processor.js:53:14)
+    at compileCSS (file:///C:/Users/risha/Desktop/apps/portfolio/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:36898:59)
+    at async Object.transform (file:///C:/Users/risha/Desktop/apps/portfolio/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:36171:11)
+    at async transform (file:///C:/Users/risha/Desktop/apps/portfolio/node_modules/rollup/dist/es/shared/node-entry.js:19581:16)[39m
